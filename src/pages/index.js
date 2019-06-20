@@ -32,6 +32,7 @@ const SectionCellGroup = styled.div`
 const Logo = styled.img`
   width: 50px;
   cursor: pointer;
+  transform: scale(1);
   transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 
   &:hover {

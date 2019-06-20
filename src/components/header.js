@@ -1,6 +1,7 @@
 import { Link } from "gatsby"
 import PropTypes from "prop-types"
 import React, { Component } from "react"
+import StripeCheckout from "react-stripe-checkout"
 import "../styles/header.scss"
 
 class Header extends Component {
@@ -20,6 +21,24 @@ class Header extends Component {
     }
   }
 
+  handlePurchase = token => {
+    const amount = 5000
+    const description = "My awesome product"
+
+    const bodyObject = {
+      tokenId: token.id,
+      email: token.email,
+      name: token.name,
+      description,
+      amount,
+    }
+
+    fetch("http://localhost:9000/stripe-charge", {
+      method: "POST",
+      body: JSON.stringify(bodyObject),
+    })
+  }
+
   render() {
     return (
       <div
@@ -36,9 +55,14 @@ class Header extends Component {
           <Link to="/">Courses</Link>
           <Link to="/">Download</Link>
           <Link to="/">Workshops</Link>
-          <Link to="/">
+          <StripeCheckout
+            amount={5000}
+            image="https://cl.ly/0K2f1V3K3h0D/download/Logo.jpg"
+            token={this.handlePurchase}
+            stripeKey={process.env.GATSBY_STRIPE_KEY}
+          >
             <button>Buy</button>
-          </Link>
+          </StripeCheckout>
         </div>
       </div>
     )
